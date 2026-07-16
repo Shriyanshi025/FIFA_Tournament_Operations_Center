@@ -1,0 +1,417 @@
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&family=Outfit:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+:root {
+  /* === DESIGN SYSTEM TOKENS === */
+  
+  /* 1. Brand & Theme Identity (Default Theme: FIFA Enterprise Light) */
+  --theme-name: "FIFA Enterprise Light";
+  --color-background: #F8FAFC;      /* Soft, neutral slate off-white background */
+  --color-surface: #FFFFFF;         /* Solid white container cards */
+  --color-surface-hover: #F1F5F9;   /* Subtle slate-100 hover state */
+  
+  --color-primary: #2563EB;         /* Professional SaaS Blue (Stripe / Linear style) */
+  --color-primary-fg: #FFFFFF;
+  --color-secondary: #10B981;       /* Friendly Emerald Green */
+  --color-secondary-fg: #FFFFFF;
+  --color-accent: #6366F1;          /* Premium Indigo accent */
+  --color-accent-fg: #FFFFFF;
+  
+  --color-success: #10B981;         /* Green success state */
+  --color-success-fg: #FFFFFF;
+  --color-warning: #F59E0B;         /* Soft Amber warning state */
+  --color-warning-fg: #FFFFFF;
+  --color-error: #EF4444;           /* Warm Coral Red */
+  --color-error-fg: #FFFFFF;
+  --color-info: #2563EB;            /* Blue information */
+  --color-info-fg: #FFFFFF;
+  --color-neutral: #64748B;         /* Soft Slate neutral */
+  
+  --color-border: #E2E8F0;          /* Delicate light borders (slate-200) */
+  --color-text-primary: #0F172A;    /* Professional slate-900 typography */
+  --color-text-secondary: #475569;  /* Highly readable slate-600 */
+  --color-text-muted: #94A3B8;      /* Clean slate-400 */
+  
+  --color-overlay: rgba(15, 23, 42, 0.3); /* Soft semi-transparent backdrop shadow */
+  --color-focus: #2563EB;           /* SaaS blue focus outline */
+  --color-focus-offset: #FFFFFF;
+  
+  --color-disabled-bg: #F1F5F9;
+  --color-disabled-text: #94A3B8;
+  --color-selection-bg: rgba(37, 99, 235, 0.12);
+  --color-selection-text: #2563EB;
+
+  /* 2. Breakpoints */
+  --breakpoint-sm: 640px;           /* Mobile */
+  --breakpoint-md: 768px;           /* Tablet */
+  --breakpoint-lg: 1024px;          /* Laptop */
+  --breakpoint-xl: 1280px;          /* Desktop */
+  --breakpoint-2xl: 1536px;         /* Ultra-wide wall-mount arrays */
+
+  /* 3. Typography Scale */
+  --font-family-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-family-display: "Inter", -apple-system, sans-serif;
+  --font-family-mono: "JetBrains Mono", SFMono-Regular, Consolas, monospace;
+
+  /* 4. Spacing Scale (Comfortable, breathable spacing) */
+  --spacing-1xs: 4px;
+  --spacing-2xs: 6px;
+  --spacing-3xs: 8px;
+  --spacing-sm: 10px;
+  --spacing-md: 16px;
+  --spacing-lg: 20px;
+  --spacing-xl: 28px;
+  --spacing-2xl: 36px;
+  --spacing-3xl: 52px;
+  --spacing-4xl: 72px;
+  --spacing-5xl: 104px;
+
+  /* 5. Border Radius (Beautiful large rounded corners) */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 28px;
+
+  /* 6. Shadows (Subtle, elegant elevation values) */
+  --shadow-low: 0 1px 3px 0 rgba(15, 23, 42, 0.03), 0 1px 2px -1px rgba(15, 23, 42, 0.03);
+  --shadow-medium: 0 4px 6px -1px rgba(15, 23, 42, 0.05), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+  --shadow-high: 0 10px 15px -3px rgba(15, 23, 42, 0.05), 0 4px 6px -4px rgba(15, 23, 42, 0.05);
+  --shadow-focus: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  --shadow-overlay: 0 20px 25px -5px rgba(15, 23, 42, 0.08);
+
+  /* 7. Z-Index Scale */
+  --z-dropdown: 1000;
+  --z-navigation: 1020;
+  --z-overlay: 1040;
+  --z-popover: 1060;
+  --z-modal: 1080;
+  --z-toast: 1100;
+  --z-tooltip: 1120;
+
+  /* 8. Motion & Transitions (Subtle & Calming UI feedback) */
+  --motion-duration-fast: 120ms;
+  --motion-duration-normal: 220ms;
+  --motion-duration-slow: 380ms;
+  --motion-duration-extra-slow: 540ms;
+  --motion-ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  --motion-ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --motion-ease-in: cubic-bezier(0.4, 0, 1, 1);
+}
+
+/* === THEME OVERRIDES === */
+
+/* 1. Charcoal Dark Theme (Premium Dark Mode Preference) */
+[data-theme="light"] {
+  --theme-name: "FIFA Enterprise Dark";
+  --color-background: #0B0F19;      /* Elegant deep slate-blue gray background */
+  --color-surface: #151D30;         /* Solid slate navy container */
+  --color-surface-hover: #1E2942;   /* Interactive slate hover */
+  
+  --color-primary: #3B82F6;         /* Clear blue */
+  --color-primary-fg: #FFFFFF;
+  --color-secondary: #10B981;       /* FIFA Emerald */
+  --color-secondary-fg: #FFFFFF;
+  --color-accent: #818CF8;          /* Bright Indigo */
+  --color-accent-fg: #FFFFFF;
+  
+  --color-success: #10B981;
+  --color-success-fg: #FFFFFF;
+  --color-warning: #F59E0B;
+  --color-warning-fg: #151D30;
+  --color-error: #EF4444;
+  --color-error-fg: #FFFFFF;
+  --color-info: #3B82F6;
+  --color-info-fg: #FFFFFF;
+  --color-neutral: #64748B;
+  
+  --color-border: #222F4C;          /* Sophisticated dark border line */
+  --color-text-primary: #F8FAFC;    /* Bright high contrast text */
+  --color-text-secondary: #94A3B8;  /* Muted secondary labels */
+  --color-text-muted: #64748B;      /* Disabled text color */
+  
+  --color-overlay: rgba(11, 15, 25, 0.7);
+  --color-focus: #3B82F6;
+  --color-focus-offset: #0B0F19;
+  
+  --color-disabled-bg: #1E2942;
+  --color-disabled-text: #64748B;
+  --color-selection-bg: rgba(59, 130, 246, 0.25);
+  --color-selection-text: #FFFFFF;
+  
+  --shadow-low: 0 1px 2px 0 rgba(0, 0, 0, 0.15);
+  --shadow-medium: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+  --shadow-high: 0 10px 15px -3px rgba(0, 0, 0, 0.25), 0 4px 6px -2px rgba(0, 0, 0, 0.15);
+}
+
+/* 2. High Contrast Theme (WAI-ARIA Accessibility Focus) */
+[data-theme="high-contrast"] {
+  --theme-name: "High Contrast Accessibility";
+  --color-background: #000000;      /* Pure black */
+  --color-surface: #000000;         /* Pure black containers */
+  --color-surface-hover: #1E293B;   /* Active border highlighting */
+  
+  --color-primary: #FFFF00;         /* High visibility yellow */
+  --color-primary-fg: #000000;
+  --color-secondary: #00FF00;       /* High visibility green */
+  --color-secondary-fg: #000000;
+  --color-accent: #00FFFF;          /* High visibility cyan */
+  --color-accent-fg: #000000;
+  
+  --color-success: #00FF00;
+  --color-success-fg: #000000;
+  --color-warning: #FFFF00;
+  --color-warning-fg: #000000;
+  --color-error: #FF0000;           /* Solid alert red */
+  --color-error-fg: #FFFFFF;
+  --color-info: #00FFFF;
+  --color-info-fg: #000000;
+  --color-neutral: #FFFFFF;
+  
+  --color-border: #FFFFFF;          /* Stark white solid borders */
+  --color-text-primary: #FFFFFF;    /* Pure white */
+  --color-text-secondary: #F3F4F6;
+  --color-text-muted: #D1D5DB;
+  
+  --color-overlay: rgba(0, 0, 0, 0.95);
+  --color-focus: #FFFF00;
+  --color-focus-offset: #000000;
+  
+  --color-disabled-bg: #1F2937;
+  --color-disabled-text: #F3F4F6;
+  --color-selection-bg: #FFFF00;
+  --color-selection-text: #000000;
+  
+  --shadow-low: none;
+  --shadow-medium: none;
+  --shadow-high: none;
+  --shadow-focus: 0 0 0 4px #FFFF00;
+}
+
+/* 3. Emergency Mode Theme (Dynamic alert level) */
+[data-theme="emergency"] {
+  --theme-name: "Emergency Operations Level 1";
+  --color-background: #0D0404;      /* Pure charcoal black with a warm red under-tone */
+  --color-surface: #1C0A0A;         /* Deep non-reflective crimson container */
+  --color-surface-hover: #2E1212;   /* Interactive red-brown hover */
+  
+  --color-primary: #F87171;         /* Evacuation active warning peach-red */
+  --color-primary-fg: #FFFFFF;
+  --color-secondary: #F87171;
+  --color-secondary-fg: #FFFFFF;
+  --color-accent: #FBBF24;          /* Warm warning amber */
+  --color-accent-fg: #0D0404;
+  
+  --color-success: #F87171;
+  --color-success-fg: #FFFFFF;
+  --color-warning: #F87171;
+  --color-warning-fg: #FFFFFF;
+  --color-error: #EF4444;
+  --color-error-fg: #FFFFFF;
+  --color-info: #F87171;
+  --color-info-fg: #FFFFFF;
+  --color-neutral: #FCA5A5;
+  
+  --color-border: #7F1D1D;          /* Clean structural borders */
+  --color-text-primary: #FFFFFF;    /* Ink white text */
+  --color-text-secondary: #FECACA;  /* Soft alert secondary pink text */
+  --color-text-muted: #EF4444;      /* Solid alarm labels */
+  
+  --color-overlay: rgba(13, 4, 4, 0.9);
+  --color-focus: #FFFFFF;
+  --color-focus-offset: #0D0404;
+  
+  --color-disabled-bg: #2E1212;
+  --color-disabled-text: #7F1D1D;
+  --color-selection-bg: #EF4444;
+  --color-selection-text: #FFFFFF;
+}
+
+/* === TAILWIND V4 SYSTEM INTEGRATION === */
+@theme {
+  /* Fonts */
+  --font-sans: var(--font-family-sans);
+  --font-display: var(--font-family-display);
+  --font-mono: var(--font-family-mono);
+
+  /* Typography Sizes */
+  --text-caption: 11px;
+  --text-body-base: 13px;
+  --text-h3: 16px;
+  --text-h2: 20px;
+  --text-h1: 28px;
+
+  /* Semantic Colors mapped directly to CSS custom properties */
+  --color-background: var(--color-background);
+  --color-surface: var(--color-surface);
+  --color-surface-hover: var(--color-surface-hover);
+  
+  --color-primary: var(--color-primary);
+  --color-primary-fg: var(--color-primary-fg);
+  --color-secondary: var(--color-secondary);
+  --color-secondary-fg: var(--color-secondary-fg);
+  --color-accent: var(--color-accent);
+  --color-accent-fg: var(--color-accent-fg);
+  
+  --color-success: var(--color-success);
+  --color-success-fg: var(--color-success-fg);
+  --color-warning: var(--color-warning);
+  --color-warning-fg: var(--color-warning-fg);
+  --color-error: var(--color-error);
+  --color-error-fg: var(--color-error-fg);
+  --color-info: var(--color-info);
+  --color-info-fg: var(--color-info-fg);
+  --color-neutral: var(--color-neutral);
+  
+  --color-border: var(--color-border);
+  --color-text-primary: var(--color-text-primary);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-text-muted: var(--color-text-muted);
+  
+  --color-overlay: var(--color-overlay);
+  --color-focus: var(--color-focus);
+  --color-focus-offset: var(--color-focus-offset);
+  
+  --color-disabled-bg: var(--color-disabled-bg);
+  --color-disabled-text: var(--color-disabled-text);
+  --color-selection-bg: var(--color-selection-bg);
+  --color-selection-text: var(--color-selection-text);
+
+  /* Spacing Scale override/additions */
+  --spacing-1xs: var(--spacing-1xs);
+  --spacing-2xs: var(--spacing-2xs);
+  --spacing-3xs: var(--spacing-3xs);
+  --spacing-sm: var(--spacing-sm);
+  --spacing-md: var(--spacing-md);
+  --spacing-lg: var(--spacing-lg);
+  --spacing-xl: var(--spacing-xl);
+  --spacing-2xl: var(--spacing-2xl);
+  --spacing-3xl: var(--spacing-3xl);
+  --spacing-4xl: var(--spacing-4xl);
+  --spacing-5xl: var(--spacing-5xl);
+
+  /* Radius Scales */
+  --radius-xs: var(--radius-xs);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+  --radius-2xl: var(--radius-2xl);
+
+  /* Shadows Scale */
+  --shadow-low: var(--shadow-low);
+  --shadow-medium: var(--shadow-medium);
+  --shadow-high: var(--shadow-high);
+  --shadow-focus: var(--shadow-focus);
+  --shadow-overlay: var(--shadow-overlay);
+
+  /* Z-Index Scales */
+  --z-dropdown: var(--z-dropdown);
+  --z-navigation: var(--z-navigation);
+  --z-overlay: var(--z-overlay);
+  --z-popover: var(--z-popover);
+  --z-modal: var(--z-modal);
+  --z-toast: var(--z-toast);
+  --z-tooltip: var(--z-tooltip);
+
+  /* Motion and Animations */
+  --animate-pulse-gentle: pulse-gentle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-fade-in-slide: fade-in-slide var(--motion-duration-normal) var(--motion-ease-spring) forwards;
+  --animate-slide-in-right: slide-in-right var(--motion-duration-slow) var(--motion-ease-spring) forwards;
+  --animate-scale-up: scale-up var(--motion-duration-fast) var(--motion-ease-spring) forwards;
+
+  @keyframes pulse-gentle {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.55; transform: scale(0.98); }
+  }
+  @keyframes fade-in-slide {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes slide-in-right {
+    from { opacity: 0; transform: translateX(12px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes scale-up {
+    from { opacity: 0; transform: scale(0.97); }
+    to { opacity: 1; transform: scale(1); }
+  }
+}
+
+/* === BASE ACCESSIBILITY & STRUCTURAL LAYERS === */
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+    border-color: var(--color-border);
+  }
+
+  html, body {
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    font-family: var(--font-family-sans);
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
+
+  /* Keyboard outline behavior */
+  :focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 2px;
+    box-shadow: var(--shadow-focus);
+  }
+
+  /* Global selection colors */
+  ::selection {
+    background-color: var(--color-selection-bg);
+    color: var(--color-selection-text);
+  }
+
+  /* Global table standards for high data density */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.75rem;
+    font-family: var(--font-family-mono);
+  }
+
+  th {
+    font-weight: 600;
+    text-align: left;
+    padding: var(--spacing-2xs) var(--spacing-xs);
+    border-bottom: 2px solid var(--color-border);
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    font-size: 0.65rem;
+    letter-spacing: 0.05em;
+  }
+
+  td {
+    padding: var(--spacing-2xs) var(--spacing-xs);
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-text-primary);
+  }
+
+  tr:hover td {
+    background-color: var(--color-surface-hover);
+  }
+}
+
+/* === REDUCED MOTION ACCESSIBILITY === */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

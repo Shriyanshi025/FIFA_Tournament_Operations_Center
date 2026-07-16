@@ -1,0 +1,6 @@
+{
+  "name": "FIFA Tournament Operations",
+  "description": "Premium Enterprise Tournament Operations Platform for the FIFA World Cup 2026.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
