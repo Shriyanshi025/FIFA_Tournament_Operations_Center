@@ -111,5 +111,5 @@ export interface CollaborationProvider {
   logActivity(activity: Omit<CollaborationActivity, "id" | "timestamp">): Promise<CollaborationActivity>;
   
   // Sync
-  syncState(payload: SyncStatePayload): Promise<Record<string, any>>;
+  syncState(payload: SyncStatePayload): Promise<Record<string, unknown>>;
 }

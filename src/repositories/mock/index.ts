@@ -73,7 +73,7 @@ class BaseInMemoryRepository<T extends { id: string; createdAt?: string; updated
     return this.items.filter(item => !item.isDeleted && filter(item)).map(item => ({ ...item }));
   }
 
-  async create(item: any): Promise<T> {
+  async create(item: Partial<T>): Promise<T> {
     const now = new Date().toISOString();
     const newItem = {
       ...item,

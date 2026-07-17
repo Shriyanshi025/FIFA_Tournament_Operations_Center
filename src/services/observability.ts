@@ -18,7 +18,7 @@ export interface StructuredLog {
   simulationId?: string;
   operatorId?: string;
   durationMs?: number;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export type HealthStatus = "OK" | "DEGRADED" | "FAILING";
@@ -118,7 +118,7 @@ class TelemetryManager {
   public log(
     level: LogLevel,
     message: string,
-    metadata?: Record<string, any>,
+    metadata?: Record<string, unknown>,
     ids?: {
       correlationId?: string;
       traceId?: string;
@@ -137,7 +137,7 @@ class TelemetryManager {
     };
 
     // Console output mapping for observability sinks
-    const color = level === "ERROR" || level === "CRITICAL" ? "\x1b[31m" : level === "WARN" ? "\x1b[33m" : "\x1b[32m";
+    const _color = level === "ERROR" || level === "CRITICAL" ? "\x1b[31m" : level === "WARN" ? "\x1b[33m" : "\x1b[32m";
     console.log(`[TOC-OBSERVABILITY] [${logEntry.timestamp}] [${level}] ${message}`, metadata || "");
 
     this.logsBuffer.push(logEntry);
@@ -200,7 +200,7 @@ class TelemetryManager {
   }
 
   public getPlatformHealth(): PlatformHealth {
-    const components = this.componentHealths as any;
+    const components = this.componentHealths as Record<string, ComponentHealth>;
     // Determine overall health based on components
     let overall: HealthStatus = "OK";
     const values = Object.values(components) as ComponentHealth[];

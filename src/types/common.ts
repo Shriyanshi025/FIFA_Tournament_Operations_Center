@@ -47,5 +47,5 @@ export interface AuditLog {
   traceId?: string;
   operatorId?: string;
   message: string;
-  details?: Record<string, any>;
+  details?: Record<string, unknown>;
 }

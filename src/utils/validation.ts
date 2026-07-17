@@ -13,6 +13,6 @@ export function validatePin(pin: string): boolean {
 /**
  * Validates if an input is a valid non-empty string
  */
-export function validateNonEmptyString(val: any): boolean {
+export function validateNonEmptyString(val: unknown): boolean {
   return typeof val === "string" && val.trim().length > 0;
 }

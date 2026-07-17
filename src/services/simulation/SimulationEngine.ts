@@ -214,7 +214,7 @@ export class SimulationEngine {
     const currentTime = new Date(this.state.simulationTime);
     // Add (speedMultiplier * 2) minutes of virtual time per 5-second physical tick to keep it engaging
     const minsToAdd = this.state.speedMultiplier * 2;
-    currentTime.setMinutes(currentTime.setMinutes(currentTime.getMinutes() + minsToAdd));
+    currentTime.setMinutes(currentTime.getMinutes() + minsToAdd);
     this.state.simulationTime = currentTime.toISOString();
 
     // 2. Determine Current Stage (Kickoff is hardcoded at 19:00:00Z)

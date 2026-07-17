@@ -924,7 +924,7 @@ export class HumanDecisionWorkflowManager {
    * Complete operational metrics tracking
    */
   public getMetrics(): WorkflowMetrics {
-    const total = this.decisions.size;
+    const _total = this.decisions.size;
     const list = Array.from(this.decisions.values());
 
     const reviewed = list.filter(d =>
@@ -1080,7 +1080,7 @@ export class HumanDecisionWorkflowManager {
   private computeCosineSimilarity(s1: string, s2: string): number {
     const words1 = s1.toLowerCase().split(/\s+/);
     const words2 = s2.toLowerCase().split(/\s+/);
-    const set1 = new Set(words1);
+    const _set1 = new Set(words1);
     const set2 = new Set(words2);
 
     const intersection = words1.filter(w => set2.has(w));
