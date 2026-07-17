@@ -1,75 +1,160 @@
-# FIFA TOC Nexus: Collaborative Real-Time Operations Platform
+# FIFA TOC Nexus: Collaborative Real-Time Tournament Operations Center
 
-Welcome to **FIFA TOC Nexus**, a premium, cognitive real-time operations console engineered for the **FIFA World Cup 2026**. Designed for the Tournament Operations Center (TOC), this platform coordinates stadium crowd flows, safety protocols, medical dispatches, transit networks, and environmental conditions across multiple operator terminals simultaneously.
-
-This release includes dedicated **Demo Mode (One-Click Scenario Orchestrator)** and **Judge Presentation Mode (Evaluating Cognitive Impact)** for direct evaluation.
+FIFA TOC Nexus is a premium, cognitive real-time operations console engineered for the **FIFA World Cup 2026**. Designed for the Tournament Operations Center (TOC), it orchestrates stadium crowd flows, safety protocols, medical dispatches, transit networks, and environmental conditions across multiple operator terminals simultaneously.
 
 ---
 
-## 🚀 Key Features & Architectural Mastery
-
-### 1. Unified Cognitive Flow (End-to-End Integration)
-*   **Event-Driven Simulation Engine**: Drives deterministic or custom timelines representing crowd flow velocity, ambient stadium parameters, weather radar changes, and incident logs.
-*   **Centralized Event Bus**: Receives high-priority dispatches, triggers reactive UI state maps, and pushes event notifications across all active terminals.
-*   **AI Cognitive Runtime (RAG-Enabled)**: Integrates deep context parsing, matching incidents against localized standard operating manuals (Knowledge Layer).
-*   **Gemini Strategy Engine**: Orchestrates complex emergency playbooks into clear, multi-tier tactical recommendations with high confidence scores.
-*   **Human-In-The-Loop Consent**: Enforces strict operational accountability, requiring human approval before dispatching technical or medical interventions.
-*   **Real-Time Live Collaboration Hub**: Features active presence indicators, offline lease-locks, visual cursors, and instant cross-terminal sync.
-*   **Immutable Audit Logs**: Tracks every system notification, AI dispatch, and human override action for regulatory debriefings.
-
-### 2. One-Click Scenario Orchestrator (Demo Mode)
-Experience 10 distinct, pre-configured live operations scenarios under different workloads and stressors, available at a single click with no manual setup:
-1.  **Normal Match (`SC-NORMAL`)**: Typical matchday ingress flow with average queues and nominal security clearances.
-2.  **Heavy Crowd Surge (`SC-SOLD-OUT`)**: Sold-out match ingress with critical crowd accumulation at Northern gates.
-3.  **Medical Alert (`SC-HEAT`)**: 39°C temperature spike causing medical exhaustions and dehydration alerts across Sector F.
-4.  **Security Threat (`SC-HIGH-RISK`)**: High-risk fan friction at East Gate B, activating safety cordons.
-5.  **Metro Failure (`SC-STRIKE`)**: Transport station disruption triggering severe queue congestion and transit rerouting.
-6.  **Heavy Rain (`SC-RAIN`)**: Microclimate cloudburst requiring immediate gate canopy deployments and umbrella-distribution.
-7.  **VIP Arrival (`SC-VIP`)**: Premium delegation ingress requiring active road closures and priority elevator locks.
-8.  **Power Failure (`SC-POWER`)**: Substation grid failure switching stadium systems onto auxiliary generator feeds.
-9.  **Accessibility (`SC-ACCESS`)**: Inbound high-volume delegation requiring wheelchair-ramps, golf carts, and staff escorting.
-10. **Emergency Evacuation (`SC-EVAC`)**: Match suspension and stadium-wide emergency exit routing.
-
-### 3. Judge Presentation View
-Toggle **JUDGE VIEW ON** inside the Competition Readiness Center to:
-*   **Hide Developer Noise**: Suppresses diagnostic timetables, raw telemetry clocks, and layout configuration options.
-*   **Display Clean KPIs**: Shows live **Spectator Safety Index (SLA)**, **Dispatch SLA Compliance**, and **AI Strategy Acceptance Ratio**.
-*   **Highlight AI Impact & Outcomes**: Reviews targeted outcomes (e.g. "Saved 1.8 mins response time" or "Reduced turnstile congestion by 42%").
-*   **Track Operational Timelines**: Presents a timeline detailing the exact incident raised, Gemini recommendation generated, and human operational approval state.
+## 🏆 Project Overview & Value Proposition
+In mega-scale sports tournaments like the FIFA World Cup, operational delays of even a few minutes can lead to catastrophic crowd surges, critical medical incidents, or severe transport gridlock. **FIFA TOC Nexus** bridges the gap between raw stadium IoT telemetry and operational response. By combining a real-time event-driven engine with the **Google Gemini SDK**, TOC Nexus provides predictive recommendations that operators can evaluate, approve, or override with human-in-the-loop accountability.
 
 ---
 
-## ♿ WCAG AA Accessibility Standards
-Built from the ground up to support accessible venue coordination:
-*   **Semantic Structure**: Uses standard landmarks (`<header>`, `<main>`, `<nav>`, `<aside>`) to construct a clear hierarchy.
-*   **Keyboard Navigation**: Full support for focus indicators, tab rings, and keyboard-friendly interactive lists.
-*   **Skip-To-Content Anchor**: High-visibility link allows screen readers to bypass main header HUD elements instantly.
-*   **High-Contrast Color Palette**: Crisp typography conforming to strict WCAG color ratios for low-vision and outdoor sunlight operation.
+## ⚠️ The Problem Statement
+Stadium operations center leaders face a staggering volume of disconnected telemetry inputs during match days:
+1. **Data Silos**: Turnstile rates, security queues, medical reports, transit schedules, and microclimate radars operate on separate systems.
+2. **Cognitive Overload**: When multiple incidents happen simultaneously (e.g. a metro breakdown coinciding with a crowd surge), operators struggle to quickly apply Standard Operating Procedures (SOPs).
+3. **Auditability Gaps**: Decisions made in high-stress environments lack secure, cryptographic audit trails for post-match debriefings.
 
 ---
 
-## ⚡ Setup & Execution
+## 💡 The Solution
+**FIFA TOC Nexus** unifies stadium operations into a single interactive cockpit:
+* **Event-Driven Command Center**: Aggregates disparate telemetry data into real-time visual alerts and maps.
+* **Cognitive Decision Support**: Leverages RAG (Retrieval-Augmented Generation) against stadium SOP handbooks using Gemini to propose structured operational plans.
+* **Human-In-The-Loop Consent**: Safeguards stadium operations by ensuring all AI recommendations require a physical operator's approval before deployment.
+* **State-Sync Collaboration**: Ensures multi-terminal operator synchronization with visual cursors, online lease-locks, and presence indicators.
 
-FIFA TOC Nexus runs entirely client-side for sandbox-ready preview.
+---
 
-### Prerequisites
-*   **Node.js**: v18+ 
-*   **Package Manager**: `npm`
+## 🤖 Google Gemini AI Integration
+The cognitive heart of TOC Nexus is powered by the **Google Gemini SDK** (`@google/genai`):
+1. **RAG-Driven Prompting**: The system queries a specialized Knowledge Layer containing official stadium emergency handbooks, matching the active incident context.
+2. **Structured Outputs**: Prompts are formatted to return structured JSON payloads specifying:
+   - **Tactical Playbook Title & Rationale**
+   - **Recommended Actions** (e.g. turnstile redirection, volunteer dispatch)
+   - **Expected SLA Impacts** (e.g. target queue wait reductions)
+   - **AI Confidence Scores**
+3. **Graceful Failover Matrix**: Includes simulated offline/rate-limit recovery (429/500 errors) that automatically falls back to local edge diagnostics and notifies operations of degraded provider states.
 
-### Local Launch
-```bash
-# 1. Install dependencies
-npm install
+---
 
-# 2. Launch the Vite development server
-npm run dev
+## 🏗️ Architecture & Core Layers
+```
+┌────────────────────────────────────────────────────────┐
+│               TOC OPERATOR WORKSPACE (UI)              │
+│       Dashboard  •  Map  •  Incidents  •  Diagnostics  │
+└───────────────────────────┬────────────────────────────┘
+                            ▼
+┌────────────────────────────────────────────────────────┐
+│           REAL-TIME EVENT BUS (Pub/Sub Engine)         │
+│  Match Events  •  Crowd Densities  •  Incident Dispatches│
+└───────────────────────────┬────────────────────────────┘
+                            ▼
+┌───────────────────────────┴────────────────────────────┐
+│                  COGNITIVE AI RUNTIME                  │
+│   Knowledge SOPs (RAG)  ◄──►  Google Gemini Provider    │
+└───────────────────────────┬────────────────────────────┘
+                            ▼
+┌───────────────────────────┴────────────────────────────┐
+│               DECISION WORKFLOW ENGINE                 │
+│      Audit Ledger Logs   ◄──►   Operator Consent Gate   │
+└────────────────────────────────────────────────────────┘
 ```
 
-The application will bind to the designated port and open a live hot-reloading iframe portal.
+* **Event Bus**: An in-memory publisher-subscriber hub coordinating cross-component updates.
+* **Simulation Flight Deck**: A deterministic scenario simulator running time dilation cycles to model ingress/egress dynamics.
+* **Live Collaboration Layer**: Emulates operational presence leasing, preventing conflicting operator commands on active incidents.
 
 ---
 
-## 🏆 Final Submission Status
-*   **Phase 1-12 Architecture**: Frozen and fully verified.
-*   **Phase 13 Production Readiness**: Audited, typed, and signed-off in `PRODUCTION_READINESS.md`.
-*   **Release Candidate (RC-1)**: All 10 scenarios and Judge Mode KPI structures fully functional with **zero build errors**.
+## ✨ Features
+* **Interactive Spatial Map Overlay**: Clickable sector map overlays showcasing real-time gate processing rates, queue counts, and turnstile wait times.
+* **One-Click Live Scenarios**: 10 pre-configured match-day scenarios ranging from a normal match loop to critical metro failures, crowd surges, and emergency evacuations.
+* **Competition Presentation Mode (Judge View)**: A clean view toggle that simplifies layout details to showcase high-level KPIs, AI strategy acceptance ratios, and SLA impact metrics.
+* **SLA Observability Logs**: A structured log terminal featuring chronological logging of all system notifications, incident lifecycles, and operator overrides.
+
+---
+
+## 🛠️ Tech Stack
+* **Framework**: React 19, TypeScript
+* **Styling**: Vanilla CSS, Tailwind CSS
+* **Build System**: Vite 6, ESBuild
+* **AI Orchestration**: Google Gemini SDK (`@google/genai`)
+* **Icons**: Lucide React
+* **Runtime**: Node.js & Express
+
+---
+
+## 🚀 Setup & Installation
+
+### Prerequisites
+* **Node.js**: Version 18 or above
+* **Package Manager**: npm
+
+### Installation Steps
+1. Clone the repository and navigate to the project directory:
+   ```bash
+   npm install
+   ```
+2. Set your environment variables (optional for simulation mode):
+   Create a `.env` file in the root directory:
+   ```env
+   GEMINI_API_KEY=your_gemini_api_key_here
+   ```
+3. Run the development server:
+   ```bash
+   npm run dev
+   ```
+4. Access the application in your browser at `http://localhost:3000`.
+
+---
+
+## 🏆 Demo Guide for Judges
+
+Follow these steps to experience the full operational lifecycle of TOC Nexus:
+
+### Step 1: Initialize the Scenario
+1. Under the **Simulation Flight Deck** on the main dashboard, select a scenario from the dropdown (e.g. **Sold Out Attendance Peak** or **Metro Transit Strike**).
+2. Click **Deploy Selected Scenario** and press **Resume** to begin the virtual simulation timeline.
+3. Observe the turnstile flow rates and sector heat levels changing in the **Ingress Gate Flows** panel.
+
+### Step 2: Evaluate AI Recommendations
+1. Navigate to the **Incident Registry** on the left menu.
+2. View the automatically generated alerts under **Live Incident Registry**.
+3. Under the **AI Copilot** recommendations section, examine the plan suggested by the Gemini Engine. 
+4. Approve the recommendation to execute turnstile rerouting, and verify the incident status transitions to **RESOLVED**.
+
+### Step 3: Audit System Observability
+1. Open the **Engineering Diagnostics** page.
+2. Review the **Latency Telemetry Analyzer** and the **Observed Structured Logs Terminal** to audit the cryptographic trace logs recorded for the approved scenario actions.
+
+### Step 4: Access the Judge View
+1. Toggle the **Audit Suite Switch** to **ON** at the top of the main dashboard.
+2. Review the purified KPI cards showcasing **SLA Compliance**, **AI Acceptance**, and **Spectator Safety Index** tailored for executive review.
+
+---
+
+## 📂 Folder Structure
+```
+├── server.ts              # Express web server configuration
+├── tsconfig.json          # TypeScript compilation settings
+├── vite.config.ts         # Vite bundler configuration
+└── src/
+    ├── main.tsx           # Client entrypoint
+    ├── App.tsx            # Main Application Shell
+    ├── index.css          # CSS variable styling system
+    ├── components/        # Reusable UI widgets & dashboard cards
+    ├── context/           # Tournament & Collaboration state providers
+    ├── layout/            # Page Header, Sidebar, and Breadcrumb structures
+    ├── pages/             # App views (Dashboard, Map, Incidents, Settings)
+    ├── services/          # EventBus, Gemini SDK integration, mock layers
+    ├── types/             # TypeScript interfaces for tournament state
+    └── utils/             # Loggers & validation helpers
+```
+
+---
+
+## 🔮 Future Scope
+1. **Live Camera Feeds**: Integration with computer-vision models to automatically count queue length in real-time.
+2. **Predictive Simulation**: Utilizing historical match data to train models that forecast crowd bottlenecks 30 minutes before they occur.
+3. **Cross-Agency Dispatch**: Direct API integrations to automatically notify local municipal transit and emergency response units of stadium incidents.
