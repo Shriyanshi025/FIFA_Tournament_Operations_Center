@@ -1,9 +1,11 @@
 import * as React from "react";
 import { 
-  Cpu, Database, Clock, Terminal, Trash2, AlertTriangle, CheckCircle, Search, Sliders, Send
+  Cpu, Database, Clock, Terminal, Trash2, AlertTriangle, CheckCircle, Search, Sliders, Send, Sparkles
 } from "lucide-react";
 import { telemetry, ComponentHealth } from "../../../services/observability";
 import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Badge } from "../../index";
+import { useTournament } from "../../../context/TournamentContext";
+import { AIRequestManager } from "../../../services/aiRuntime";
 
 export const SimulationDeck: React.FC = () => {
   type LatencyKey = "ai_request" | "knowledge_retrieval" | "recommendation_generation" | "human_approval" | "dashboard_render" | "collaboration_sync";
@@ -11,6 +13,47 @@ export const SimulationDeck: React.FC = () => {
   const [testLatencyVal, setTestLatencyVal] = React.useState("120");
   const [simulatedAIFail, setSimulatedAIFail] = React.useState(false);
   const [simulatedRAGFail, setSimulatedRAGFail] = React.useState(false);
+  const [customCrisisText, setCustomCrisisText] = React.useState("");
+  const [generatingCrisis, setGeneratingCrisis] = React.useState(false);
+  const { createIncident } = useTournament();
+
+  const handleGenerateCrisis = async () => {
+    if (!customCrisisText.trim()) return;
+    setGeneratingCrisis(true);
+    telemetry.log("INFO", `Initiating Generative "What-If" Scenario evaluation: "${customCrisisText}"`);
+    
+    try {
+      const response = await AIRequestManager.getInstance().executeRequest<any>({
+        promptId: "generate-custom-crisis",
+        parameters: { crisisDescription: customCrisisText },
+        priority: "HIGH"
+      }, "google-gemini");
+
+      const parsed = response.parsedData;
+      if (parsed && parsed.title) {
+        telemetry.log("INFO", `Generative Scenario parsed successfully. Creating incident: ${parsed.title}`);
+        
+        await createIncident({
+          description: parsed.description || parsed.title,
+          category: parsed.category || "FACILITIES",
+          severity: parsed.severity || "HIGH",
+          sector: parsed.sector || "North Sector",
+          section: parsed.section || "Concourse Level",
+          stadiumId: "ST-METLIFE"
+        });
+
+        telemetry.log("INFO", `Generative Crisis "${parsed.title}" injected. Recommendation and RAG systems synchronized.`);
+        setCustomCrisisText("");
+      } else {
+        throw new Error("Failed to extract valid structured incident schema from AI generation.");
+      }
+    } catch (err: any) {
+      console.error("Generative Crisis Error", err);
+      telemetry.log("ERROR", `Generative Crisis injection failed: ${err.message || err}.`);
+    } finally {
+      setGeneratingCrisis(false);
+    }
+  };
 
   const handleSimulateLatency = () => {
     const parsedVal = parseInt(testLatencyVal, 10);
@@ -134,6 +177,38 @@ export const SimulationDeck: React.FC = () => {
               </div>
             </div>
 
+          </div>
+
+          {/* Dynamic Divider */}
+          <div className="border-t border-border/40 my-md" />
+
+          {/* Generative "What-If" Playground */}
+          <div className="p-md border border-dashed rounded-sm bg-background/20 space-y-xs text-left" id="generative-whatif-simulator">
+            <h5 className="font-display font-bold text-caption text-primary flex items-center gap-xs">
+              <Sparkles className="w-4 h-4 text-primary animate-pulse" /> Generative "What-If" Crisis Simulator [Jury Special]
+            </h5>
+            <p className="text-[11px] text-text-secondary leading-relaxed">
+              Describe any hypothetical World Cup operational emergency (e.g., <em>"Volunteers report turnstile failures at Gate North causing crowd congestion"</em> or <em>"Extreme heat causes fan dehydration in East stand requiring medical dispatch"</em>). The AI will generate custom telemetry inputs and inject the incident.
+            </p>
+            <div className="flex gap-sm items-center pt-2xs">
+              <input 
+                type="text" 
+                value={customCrisisText} 
+                onChange={(e) => setCustomCrisisText(e.target.value)}
+                placeholder="e.g., 'Volunteers report gate ticket scanner failure at Gate North' or 'Escalator outage blocks accessibility routing at Sector West'..."
+                className="flex-1 border border-border rounded-xs bg-background text-text-primary text-xs p-xs"
+                disabled={generatingCrisis}
+              />
+              <Button 
+                variant="primary" 
+                size="sm" 
+                onClick={handleGenerateCrisis} 
+                className="h-8 font-bold flex items-center gap-1xs shrink-0"
+                disabled={generatingCrisis}
+              >
+                {generatingCrisis ? "Simulating..." : "Trigger Crisis"}
+              </Button>
+            </div>
           </div>
         </CardContent>
       </Card>

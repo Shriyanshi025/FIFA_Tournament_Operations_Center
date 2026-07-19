@@ -301,7 +301,8 @@ export class AIRequestManager {
       executionTime: new Date().toISOString(),
       validationStatus: validation.isValid ? (validation.repaired ? "REPAIRED" : "SUCCESS") : "FAILED",
       validationErrors: validation.errors,
-      contextSnapshot: context
+      contextSnapshot: context,
+      safetyRatings: (rawResponse as any)?.candidates?.[0]?.safetyRatings || (rawResponse as any)?.promptFeedback?.safetyRatings
     };
 
     AIAuditLayer.getInstance().log(auditEntry);

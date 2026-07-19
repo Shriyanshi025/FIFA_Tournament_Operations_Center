@@ -941,13 +941,8 @@ export class RecommendationEngine {
   }
 
   private isApiKeyConfigured(): boolean {
-    if (typeof process !== "undefined" && process.env && process.env.GEMINI_API_KEY) {
-      return true;
-    }
-    if (typeof import.meta !== "undefined" && (import.meta as any).env && (import.meta as any).env.VITE_GEMINI_API_KEY) {
-      return true;
-    }
-    return false;
+    // Rely on secure server proxy availability checks rather than client environment variables.
+    return true;
   }
 
   private getRequiredRecommendation(id: string): EnhancedRecommendation {

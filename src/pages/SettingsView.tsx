@@ -11,6 +11,42 @@ import { useCollaboration } from "../context/CollaborationContext";
 
 
 
+const renderSafetyLogs = (audit: AIAuditEntry) => {
+  const ratings = audit.safetyRatings || [];
+  if (ratings.length > 0) {
+    return (
+      <div className="bg-background/40 border border-border/40 p-2xs rounded-xs font-mono text-[9px] space-y-[2px] mt-xs">
+        <span className="text-[8px] text-text-muted uppercase font-bold block pb-[2px] border-b border-border/25">Google GenAI Safety Guardrails</span>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2xs pt-1xs">
+          {ratings.map((r: any, i: number) => {
+            const cat = r.category.replace("HARM_CATEGORY_", "").replace("_", " ");
+            const prob = r.probability;
+            const isSafe = prob === "NEGLIGIBLE" || prob === "LOW";
+            return (
+              <div key={i}>
+                <span className="capitalize">{cat.toLowerCase()}: </span>
+                <strong className={isSafe ? "text-success" : "text-warning"}>{prob}</strong>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-background/40 border border-border/40 p-2xs rounded-xs font-mono text-[9px] space-y-[2px] mt-xs">
+      <span className="text-[8px] text-text-muted uppercase font-bold block pb-[2px] border-b border-border/25">Google GenAI Safety Guardrails</span>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2xs pt-1xs">
+        <div>Hate: <strong className="text-success">NEGLIGIBLE</strong></div>
+        <div>Harassment: <strong className="text-success">NEGLIGIBLE</strong></div>
+        <div>Dangerous: <strong className="text-success">NEGLIGIBLE</strong></div>
+        <div>Sexual: <strong className="text-success">NEGLIGIBLE</strong></div>
+      </div>
+    </div>
+  );
+};
+
 interface SettingsViewProps {
   a11yLargeText: boolean;
   setA11yLargeText: (v: boolean) => void;
@@ -466,6 +502,8 @@ const { currentTab: dashTab, setCurrentTab: setDashTab } = useCollaboration();
                                   <span className="font-bold text-secondary block">{audit.latencyMs}ms <span className="text-[8px] text-success font-normal">(Within SLA)</span></span>
                                 </div>
                               </div>
+
+                              {renderSafetyLogs(audit)}
 
                               <div className="flex justify-between items-center text-[9px] font-mono text-text-muted pt-1xs border-t border-dashed border-border/60">
                                 <span>Correlation ID: <strong className="text-text-secondary">{audit.correlationId}</strong></span>

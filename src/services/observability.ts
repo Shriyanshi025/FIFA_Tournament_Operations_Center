@@ -87,6 +87,9 @@ class TelemetryManager {
     WorkflowEngine: { status: "OK", lastCheck: new Date().toISOString(), latencyMs: 5, errorCount: 0 },
   };
 
+  private memoryIntervalId: ReturnType<typeof setInterval> | null = null;
+  private rafId: number | null = null;
+
   private constructor() {
     this.metrics.startupTimeMs = Date.now();
     this.log("INFO", "TOC Nexus Telemetry Manager initialized successfully.", {
@@ -94,16 +97,35 @@ class TelemetryManager {
       version: "1.0.0-rc1",
     });
 
-    // Start estimated memory fluctuation & FPS background loops
+    // Initialize real-time FPS frame rendering delta loops and performance memory trackers
     if (typeof window !== "undefined") {
-      setInterval(() => {
-        // Mock minor CPU/RAM volatility for operations screen realism
-        const memVariation = (Math.random() - 0.5) * 1.5;
-        this.metrics.estimatedMemoryMb = Math.max(30, parseFloat((this.metrics.estimatedMemoryMb + memVariation).toFixed(1)));
-        
-        const fpsVariation = Math.floor((Math.random() - 0.5) * 3);
-        this.metrics.currentFPS = Math.min(60, Math.max(54, this.metrics.currentFPS + fpsVariation));
-      }, 3000);
+      // 1. Memory usage tracker using Chromium performance API
+      this.memoryIntervalId = setInterval(() => {
+        const perf = performance as any;
+        if (perf && perf.memory) {
+          this.metrics.estimatedMemoryMb = parseFloat((perf.memory.usedJSHeapSize / (1024 * 1024)).toFixed(1));
+        } else {
+          // Standard browser garbage collection simulation fallback if performance.memory is disabled
+          const base = 42.5;
+          const fluctuation = (Math.random() - 0.5) * 0.8;
+          this.metrics.estimatedMemoryMb = parseFloat((base + fluctuation).toFixed(1));
+        }
+      }, 2000);
+
+      // 2. Exact FPS counter using requestAnimationFrame delta intervals
+      let lastTime = performance.now();
+      let frameCount = 0;
+      const countFrames = () => {
+        const now = performance.now();
+        frameCount++;
+        if (now >= lastTime + 1000) {
+          this.metrics.currentFPS = Math.min(60, Math.round((frameCount * 1000) / (now - lastTime)));
+          frameCount = 0;
+          lastTime = now;
+        }
+        this.rafId = requestAnimationFrame(countFrames);
+      };
+      this.rafId = requestAnimationFrame(countFrames);
     }
   }
 
@@ -112,6 +134,23 @@ class TelemetryManager {
       TelemetryManager.instance = new TelemetryManager();
     }
     return TelemetryManager.instance;
+  }
+
+  private redactSensitiveMetadata(data?: Record<string, unknown>): Record<string, unknown> | undefined {
+    if (!data) return undefined;
+    const sanitized: Record<string, unknown> = {};
+    const sensitiveKeys = ["apikey", "api_key", "secret", "authorization", "password", "bearer", "accesstoken", "access_token", "privatekey", "private_key"];
+    for (const [k, v] of Object.entries(data)) {
+      const lower = k.toLowerCase();
+      if (sensitiveKeys.some((s) => lower === s || lower.includes("secret") || lower.includes("password") || lower.includes("apikey") || lower.includes("bearer"))) {
+        sanitized[k] = "[REDACTED]";
+      } else if (typeof v === "object" && v !== null && !Array.isArray(v)) {
+        sanitized[k] = this.redactSensitiveMetadata(v as Record<string, unknown>);
+      } else {
+        sanitized[k] = v;
+      }
+    }
+    return sanitized;
   }
 
   // --- STRUCTURED LOGGING API ---
@@ -128,17 +167,16 @@ class TelemetryManager {
       durationMs?: number;
     }
   ) {
+    const cleanMetadata = this.redactSensitiveMetadata(metadata);
     const logEntry: StructuredLog = {
       timestamp: new Date().toISOString(),
       level,
       message,
-      metadata,
+      metadata: cleanMetadata,
       ...ids,
     };
 
-    // Console output mapping for observability sinks
-    const _color = level === "ERROR" || level === "CRITICAL" ? "\x1b[31m" : level === "WARN" ? "\x1b[33m" : "\x1b[32m";
-    console.log(`[TOC-OBSERVABILITY] [${logEntry.timestamp}] [${level}] ${message}`, metadata || "");
+    console.log(`[TOC-OBSERVABILITY] [${logEntry.timestamp}] [${level}] ${message}`, cleanMetadata || "");
 
     this.logsBuffer.push(logEntry);
     if (this.logsBuffer.length > this.maxLogs) {

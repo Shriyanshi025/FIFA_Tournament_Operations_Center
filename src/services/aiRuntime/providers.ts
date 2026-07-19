@@ -33,11 +33,10 @@ export class GeminiProvider implements AIProvider {
   public id = "google-gemini";
   public name = "Google Gemini";
   public supportedModels = [
-    "gemini-3.5-flash",
-    "gemini-3.1-pro-preview",
-    "gemini-3.1-flash-lite"
+    "gemini-2.5-flash",
+    "gemini-2.5-pro"
   ];
-  public defaultModel = "gemini-3.5-flash";
+  public defaultModel = "gemini-2.5-flash";
 
   private client: GoogleGenAI | null = null;
 
@@ -167,20 +166,27 @@ export class GeminiProvider implements AIProvider {
           `[GeminiProvider] [${correlationId}] Starting request execution: model=${modelToUse} priority=${priority} attempt=${attempt}/${maxRetries + 1}`
         );
 
-        const ai = this.getClient();
-        
-        // Call official Google GenAI SDK
-        const response = await ai.models.generateContent({
-          model: modelToUse,
-          contents: promptText,
-          config: {
-            temperature,
-            maxOutputTokens,
-            responseMimeType: options?.responseMimeType || "application/json",
-            safetySettings,
-            abortSignal: controller.signal,
-          },
+        // Direct request execution entirely to backend proxy route
+        const fetchResponse = await fetch("/api/ai/generate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            promptText,
+            options: {
+              model: modelToUse,
+              temperature,
+              responseMimeType: options?.responseMimeType || "application/json",
+              safetySettings
+            }
+          }),
+          signal: controller.signal
         });
+
+        if (!fetchResponse.ok) {
+          throw new Error(`Secure AI Proxy failure [Status ${fetchResponse.status}]: ${fetchResponse.statusText}`);
+        }
+
+        const response = await fetchResponse.json();
 
         // Track duration of this specific attempt
         const executionDuration = Date.now() - currentAttemptStartTime;
@@ -216,7 +222,7 @@ export class GeminiProvider implements AIProvider {
           (promptFeedback && (promptFeedback as any).blockReason) ||
           (candidates.length > 0 &&
             candidates.some(
-              (c) =>
+              (c: any) =>
                 c.finishReason === "SAFETY" ||
                 (c as any).finish_reason === "SAFETY"
             ));

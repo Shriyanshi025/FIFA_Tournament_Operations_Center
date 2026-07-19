@@ -57,50 +57,37 @@ export class MockEmbeddingProvider implements EmbeddingProvider {
 export class GeminiEmbeddingProvider implements EmbeddingProvider {
   public id = "gemini-embeddings";
   public name = "Google Gemini Embeddings";
-  private apiKey: string;
   private modelName: string;
 
-  constructor(apiKey: string, modelName = "text-embedding-004") {
-    if (!apiKey) {
-      throw new Error("API key is required to initialize GeminiEmbeddingProvider.");
-    }
-    this.apiKey = apiKey;
+  constructor(apiKey?: string, modelName = "text-embedding-004") {
+    // API key is handled securely on the server-side proxy
     this.modelName = modelName;
   }
 
   public async embedQuery(text: string): Promise<number[]> {
-    const ai = new GoogleGenAI({ apiKey: this.apiKey });
-    const response = await ai.models.embedContent({
-      model: this.modelName,
-      contents: text,
+    const fetchResponse = await fetch("/api/ai/embed", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        text,
+        modelName: this.modelName
+      })
     });
-    
+
+    if (!fetchResponse.ok) {
+      throw new Error(`Embedding Proxy failure [Status ${fetchResponse.status}]: ${fetchResponse.statusText}`);
+    }
+
+    const response = await fetchResponse.json();
     const embeddings = response.embeddings;
     if (!embeddings || embeddings.length === 0 || !embeddings[0].values) {
-      throw new Error("Gemini API failed to return embedding values.");
+      throw new Error("Gemini API failed to return embedding values from server proxy.");
     }
     return embeddings[0].values;
   }
 
   public async embedDocuments(texts: string[]): Promise<number[][]> {
-    const ai = new GoogleGenAI({ apiKey: this.apiKey });
-    // Process batch embeddings
-    const response = await ai.models.embedContent({
-      model: this.modelName,
-      contents: texts,
-    });
-
-    const embeddings = response.embeddings;
-    if (!embeddings || embeddings.length === 0) {
-      throw new Error("Gemini API failed to return batch embedding values.");
-    }
-
-    return embeddings.map(e => {
-      if (!e.values) {
-        throw new Error("Failed to extract vector values from batch response item.");
-      }
-      return e.values;
-    });
+    return Promise.all(texts.map(t => this.embedQuery(t)));
   }
 }
 

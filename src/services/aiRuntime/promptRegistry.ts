@@ -58,6 +58,34 @@ export class PromptRegistry {
       template: "Gate {{gateId}} reports wait times of {{waitTime}} minutes with flow rate {{flowRate}} fans/min. Propose rerouting alternatives from Sector {{sector}}.",
       requiredParameters: ["gateId", "waitTime", "flowRate", "sector"]
     });
+    this.registerPrompt({
+      id: "generate-custom-crisis",
+      version: "1.0",
+      category: "OPERATIONAL",
+      metadata: {
+        title: "Generative Custom Crisis Template",
+        description: "Parses human description of a crisis into structured operational incidents JSON",
+        author: "AI Platform Group",
+        tags: ["generative", "custom", "incident"],
+        createdAt: "2026-07-19T12:00:00Z"
+      },
+      template: "You are the Stadium Operations Simulation Planner. Parse this custom crisis description: '{{crisisDescription}}'. Respond in strict JSON format. JSON schema properties: \n{\n  \"title\": \"Short, operational title of the incident\",\n  \"description\": \"Detailed summary of the threat\",\n  \"category\": \"One of: CROWD, SECURITY, MEDICAL, FACILITIES, TRANSPORT, WEATHER\",\n  \"severity\": \"One of: LOW, MEDIUM, HIGH, CRITICAL\",\n  \"sector\": \"One of: North Sector, South Sector, East Sector, West Sector\",\n  \"section\": \"One of: Concourse Level, Upper Tier, Outer Perimeter\"\n}",
+      requiredParameters: ["crisisDescription"]
+    });
+    this.registerPrompt({
+      id: "ai-copilot-chat-reply",
+      version: "1.0",
+      category: "OPERATIONAL",
+      metadata: {
+        title: "AI Copilot Chat Reply Template",
+        description: "Formulates tactical chat replies for operator communications",
+        author: "AI Platform Group",
+        tags: ["copilot", "chat", "live"],
+        createdAt: "2026-07-19T12:00:00Z"
+      },
+      template: "You are the TOC AI Dispatch Coordinator. An operator ({{senderName}}, role: {{senderRole}}) posted in chat: \"{{chatMessage}}\". Recommend a short, 1-2 sentence tactical response or action citing an SOP (e.g. SOP-01, SOP-05, SOP-09). Be professional and direct.",
+      requiredParameters: ["senderName", "senderRole", "chatMessage"]
+    });
   }
 
   /**

@@ -24,9 +24,12 @@
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
-    "noEmit": true
+    "noEmit": true,
+    "types": ["node"]
   },
   "exclude": [
-    "dist"
+    "dist",
+    "**/__tests__/**",
+    "src/__tests__/**"
   ]
 }

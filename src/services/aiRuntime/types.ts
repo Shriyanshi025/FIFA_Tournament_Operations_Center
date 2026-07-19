@@ -122,6 +122,7 @@ export interface AIAuditEntry {
   operatorDecision?: "APPROVED" | "REJECTED" | "PENDING";
   operatorDecisionTime?: string;
   contextSnapshot: AIRequestContext;
+  safetyRatings?: any[];
 }
 
 /**

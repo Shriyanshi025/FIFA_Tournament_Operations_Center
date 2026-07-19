@@ -36,9 +36,9 @@ export const LiveCrowdWidget: React.FC = () => {
 
       return {
         sector: sec,
-        count: totalCount || Math.floor(Math.random() * 2000) + 3000,
+        count: totalCount || (sec.length * 280),
         densityText: `${avgDensity.toFixed(0)}% density`,
-        ratio: densityRatio || 0.45,
+        ratio: densityRatio,
         level: densityLevel,
         badgeColor
       };

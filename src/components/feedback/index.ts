@@ -5,3 +5,5 @@
 
 export * from "./Spinner";
 export * from "./Alert";
+export * from "./Skeleton";
+export * from "./ErrorBoundary";

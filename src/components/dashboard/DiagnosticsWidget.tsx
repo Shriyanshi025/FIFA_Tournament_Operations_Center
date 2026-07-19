@@ -8,6 +8,7 @@ import { HealthIndicators } from "./diagnostics/HealthIndicators";
 import { LatencyAnalysis } from "./diagnostics/LatencyAnalysis";
 import { SimulationDeck } from "./diagnostics/SimulationDeck";
 import { LogTerminal } from "./diagnostics/LogTerminal";
+import { SemanticProximityVisualizer } from "./diagnostics/SemanticProximityVisualizer";
 
 export const DiagnosticsWidget: React.FC = () => {
   const [logs, setLogs] = React.useState(telemetry.getLogs());
@@ -53,6 +54,7 @@ export const DiagnosticsWidget: React.FC = () => {
     <div className="space-y-lg animate-fade-in" id="diagnostics-widget-layout">
       <HealthIndicators health={health} />
       <LatencyAnalysis metrics={metrics} latencies={latencies} />
+      <SemanticProximityVisualizer />
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-md">
         <SimulationDeck />
         <LogTerminal logs={logs} setLogs={setLogs} />
